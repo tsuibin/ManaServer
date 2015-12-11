@@ -13,6 +13,7 @@ ManaChatServer::~ManaChatServer()
 
 void ManaChatServer::addConnection()
 {
+    qDebug() <<"new connect";
 	QTcpSocket* connection = nextPendingConnection();
 	connections.append(connection);
 	QBuffer* buffer = new QBuffer(this);
@@ -24,6 +25,7 @@ void ManaChatServer::addConnection()
 
 void ManaChatServer::removeConnection()
 {
+    qDebug() <<"remove Connect";
 	QTcpSocket* socket = static_cast<QTcpSocket*>(sender());
 	QBuffer* buffer = buffers.take(socket);
 	buffer->close();
@@ -36,19 +38,23 @@ void ManaChatServer::receiveMessage()
 {
     qDebug() <<"receive msg";
 	QTcpSocket* socket = static_cast<QTcpSocket*>(sender());
-	QBuffer* buffer = buffers.value(socket);
+//	QBuffer* buffer = buffers.value(socket);
 	
-        qint64 bytes = buffer->write(socket->readAll());
+        qDebug()<< socket->readAll();
+        /*
+	qint64 bytes = buffer->write(socket->readAll());
 	buffer->seek(buffer->pos() - bytes);
 	while (buffer->canReadLine())
 	{
 		QByteArray line = buffer->readLine();
+            	
+		qDebug() << "msg:" <<line;
+
 		foreach (QTcpSocket* connection, connections)
 		{
 			connection->write(line);
-            qDebug() << "msg:" <<line;
 
 		}
-	}
+	}*/
 }
 
